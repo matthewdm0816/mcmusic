@@ -79,6 +79,11 @@ class Parser:
         self._parse(verbose=verbose)
         self.current_time = 0
 
+    @staticmethod
+    def is_on(message):
+        # check if a message is real note_on
+        return message.type == 'note_on' and message.velocity != 0
+
     def _parse(self, verbose=False):
         """
         This function handles the reading of the midi and chunks the
@@ -120,37 +125,47 @@ class Parser:
             print('only 1 track')
         # 读取音乐，构造马尔可夫链
         for idx, track in enumerate(midi.tracks):
+            # current_time ~ current recorded chunk total time
             self.current_time = 0
             last_time = -1000
             for message in track:
                 if verbose:
                     print(message)
+                # set music tempo
                 if message.type == "set_tempo":
                     self.tempo = message.tempo
+                # any ON/OFF notes
                 elif message.type == "note_on" or message.type == "note_off":
                     # 要放在这，否则tempo可能未设定
                     if (idx != track_choose):
                         self.current_time += message.time
                         continue
+                    # select notes within 100ms in a chunk
                     if self._bucket_duration(self.current_time - last_time) > 100:
+                        # create new chunk
                         if (current_chunk != []):
+                            # send last 2 chunks into MC
                             self._sequence(previous_chunk,
-                                           current_chunk,
-                                           current_time,
-                                           current_velocity)
+                                            current_chunk,
+                                            current_time,
+                                            current_velocity)
                             print(previous_chunk, current_chunk, current_time)
+
+                            # create new chunk info
                             previous_chunk = current_chunk
                             current_time = 0
                             current_chunk = []
-                        if (message.velocity != 0 and message.type != "note_off"):
+                        if self.is_on(message):
+                            # append to chunk
                             current_velocity = message.velocity
                             if (message.channel == channel_choose or channel_choose == -1):
                                 print(last_time, ' ', self.current_time, ' ',
-                                      self._bucket_duration(self.current_time - last_time))
+                                        self._bucket_duration(self.current_time - last_time))
                                 last_time = self.current_time
                                 current_chunk.append(message.note)
                     else:
-                        if (message.velocity != 0 and message.type != "note_off"):
+                        # append to trunk
+                        if self.is_on(message):
                             if (message.channel == channel_choose or channel_choose == -1):
                                 print(last_time, ' ', self.current_time)
                                 last_time = self.current_time
@@ -164,13 +179,8 @@ class Parser:
         as an averaged duration of the current notes, this function
         permutes every combination of the previous notes to the current
         notes and sticks them into the markov chain.
-        """
-        """
-        for n1 in previous_chunk:
-            for n2 in current_chunk:
-                self.markov_chain.add(
-                    n1, n2, self._bucket_duration(duration))
-                #print(n1," ",n2)
+
+        Delegated to MarkovChain@add method
         """
         self.markov_chain.add(
             previous_chunk, current_chunk, self._bucket_duration(duration), velocity)
@@ -179,11 +189,12 @@ class Parser:
         """
         This method takes a tick count and converts it to a time in
         milliseconds, bucketing it to the nearest 250 milliseconds.
+        Changed: return real duration.
         """
         try:
             ms = ((ticks / self.ticks_per_beat) * self.tempo) / 1000
             return int(ms)
-            return int(ms - (ms % 250) + 250)
+            # return int(ms - (ms % 250) + 250)
         except TypeError:
             raise TypeError(
                 "Could not read a tempo and ticks_per_beat from midi")
