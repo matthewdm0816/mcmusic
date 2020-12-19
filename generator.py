@@ -5,16 +5,35 @@
 
 from markov_chain import MarkovChain
 
-import random
-import hashlib
-import mido
-import argparse
+import random, hashlib, argparse, mido, json, colorama
+import numpy as np
+import sklearn.cluster as cluster
+from utils import find
 
 temp_ticks = 0
+colorama.init(autoreset=True)
 
+"""
+TODO: 
+    1. Separate Chunk Note/Duration/Velocity
+    2. Enhance Duration Processing
+"""
+
+class Note:
+    def __init__(self, note=None, velocity=None, st=None, et=None):
+        self.note, self.velocity = note, velocity
+        self.start_time, self.end_time = st, et
+
+    @property
+    def duration(self):
+        return self.end_time - self.start_time
+
+    def __repr__(self):
+        return "Note(note=%d, vel=%d, duration=%d @ %d)" % (
+            self.note, self.velocity, self.duration, self.start_time
+        )
 
 class Generator:
-
     def __init__(self, markov_chain):
         self.markov_chain = markov_chain
 
@@ -77,12 +96,16 @@ class Parser:
         self.ticks_per_beat = None
         self.markov_chain = MarkovChain()
         self._parse(verbose=verbose)
-        self.current_time = 0
+        self.track_records = []
 
     @staticmethod
     def is_on(message):
         # check if a message is real note_on
         return message.type == 'note_on' and message.velocity != 0
+
+    @staticmethod
+    def is_note(message):
+        return message.type in ('note_on', 'note_off')
 
     def _parse(self, verbose=False):
         """
@@ -123,55 +146,74 @@ class Parser:
             channels = list(channels)
             channel_choose = channels[0]
             print('only 1 track')
+
+        # set music tempo previously
+        for idx, track in enumerate(midi.tracks):
+            for message in track:
+                if message.type == "set_tempo":
+                    self.tempo = message.tempo
+                    print("Track tempo is set to %d" % self.tempo)
+
         # 读取音乐，构造马尔可夫链
         for idx, track in enumerate(midi.tracks):
-            # current_time ~ current recorded chunk total time
-            self.current_time = 0
-            last_time = -1000
+            # # current_time ~ current recorded chunk total time
+            # current_time = 0
+            # # last_time ~ last chunk ending time
+            # last_time = -1000
+            # last_total_time, current_total_time = 0, 0
+            # last_velocity, current_velocity = 0, 0
+            on_notes = []
+            recorded_notes = []
+            current_time = 0
             for message in track:
                 if verbose:
                     print(message)
-                # set music tempo
-                if message.type == "set_tempo":
-                    self.tempo = message.tempo
                 # any ON/OFF notes
-                elif message.type == "note_on" or message.type == "note_off":
-                    # 要放在这，否则tempo可能未设定
-                    if (idx != track_choose):
-                        self.current_time += message.time
-                        continue
-                    # select notes within 100ms in a chunk
-                    if self._bucket_duration(self.current_time - last_time) > 100:
-                        # create new chunk
-                        if (current_chunk != []):
-                            # send last 2 chunks into MC
-                            self._sequence(previous_chunk,
-                                            current_chunk,
-                                            current_time,
-                                            current_velocity)
-                            print(previous_chunk, current_chunk, current_time)
+                if self.is_note(message):
+                    # TODO: use a state machine to record each note time!!!
+                    pos = find(on_notes, lambda x: x.note == message.note)
+                    # Note ON
+                    if self.is_on(message):
+                        current_time += message.time
+                        on_notes.append(Note(
+                            note=message.note, 
+                            velocity=message.velocity,
+                            st=current_time
+                        ))
+                    # Note END
+                    else: 
+                        if pos == []: # not find some note to end before start
+                            print(colorama.Fore.MAGENTA + "Warning: Note not found to end")
+                            # raise ValueError("Note not found to end")
+                            continue
+                        else:
+                            # NOTE: choose first note to end
+                            note = Note(on_notes[pos[0]]) # use a new copy
+                            note.end_time = current_time # set end_time
+                            del on_notes[pos[0]] # delete existed note
+                            recorded_notes.append(note) # append to notes lib
+            for note in on_notes:
+                # end up all remaining notes
+                note.end_time = current_time
+                recorded_notes.append(note)
+            
+            # sort with start_time
+            recorded_notes.sort(key=lambda note: note.start_time)
+            self.track_records.append(recorded_notes)
+            
+            # MC parsing
+            start_times = np.from_array([note.start_time for note in recorded_notes])
+            # cluster notes
+            cores, labels = cluster.dbscan(
+                start_times, metric='l2', eps=0.1, min_samples=1, n_jobs=4
+            )
+            print(cores, labels)
+            # TODO:
 
-                            # create new chunk info
-                            previous_chunk = current_chunk
-                            current_time = 0
-                            current_chunk = []
-                        if self.is_on(message):
-                            # append to chunk
-                            current_velocity = message.velocity
-                            if (message.channel == channel_choose or channel_choose == -1):
-                                print(last_time, ' ', self.current_time, ' ',
-                                        self._bucket_duration(self.current_time - last_time))
-                                last_time = self.current_time
-                                current_chunk.append(message.note)
-                    else:
-                        # append to trunk
-                        if self.is_on(message):
-                            if (message.channel == channel_choose or channel_choose == -1):
-                                print(last_time, ' ', self.current_time)
-                                last_time = self.current_time
-                                current_chunk.append(message.note)
-                self.current_time += message.time
-                current_time += message.time
+
+    def dump_records(self, filename):
+        with open(filename, 'w') as fp:
+            json.dump(self.track_records, fp)
 
     def _sequence(self, previous_chunk, current_chunk, duration, velocity):
         """
@@ -206,6 +248,10 @@ class Parser:
 
 if __name__ == "__main__":
     import sys
+    if len(sys.argv) == 2:
+        # Parse only | for debugging
+        parser = Parser(sys.argv[1], True)\
+        parser._parse()
 
     if len(sys.argv) == 3:
         # Example usage:
