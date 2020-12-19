@@ -8,7 +8,7 @@ from markov_chain import MarkovChain
 import random, hashlib, argparse, mido, json, colorama
 import numpy as np
 import sklearn.cluster as cluster
-from utils import find, warn, print_track, bienumerate
+from utils import find, warn, print_track, bienumerate, Note
 
 temp_ticks = 0
 colorama.init(autoreset=True)
@@ -18,24 +18,6 @@ TODO:
     1. Separate Chunk Note/Duration/Velocity
     2. Enhance Duration Processing
 """
-
-class Note:
-    def __init__(self, note=None, velocity=None, st=None, et=None):
-        self.note, self.velocity = note, velocity
-        self.start_time, self.end_time = st, et
-
-    @property
-    def duration(self):
-        return self.end_time - self.start_time
-
-    def __repr__(self):
-        return "Note(note=%d, vel=%d, duration=%d @ %d)" % (
-            self.note, self.velocity, self.duration, self.start_time
-        )
-
-    def copy(self):
-        return Note(self.note, self.velocity, self.start_time, self.end_time)
-
 
 class Generator:
     def __init__(self, markov_chain):

@@ -42,3 +42,27 @@ def print_track(notes):
     """
     for note in notes:
         print(note)
+
+class Note:
+    def __init__(self, note=None, velocity=None, st=None, et=None):
+        self.note, self.velocity = note, velocity
+        self.start_time, self.end_time = st, et
+
+    @property
+    def duration(self):
+        return self.end_time - self.start_time
+
+    def __repr__(self):
+        return "Note(note=%d, vel=%d, duration=%d @ %d)" % (
+            self.note, self.velocity, self.duration, self.start_time
+        )
+
+    def copy(self):
+        return Note(self.note, self.velocity, self.start_time, self.end_time)
+
+    def __getitem__(self, key):
+        # enables hash-like visiting
+        return getattr(self, key)
+
+    def __setitem__(self, key, value):
+        setattr(self, key, value)

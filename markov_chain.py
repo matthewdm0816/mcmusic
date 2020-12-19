@@ -2,8 +2,10 @@
 # This class handles the storage and manipulation of a markov chain of notes.
 
 from collections import Counter, defaultdict, namedtuple
-
 import random, json
+import numpy as np
+
+from utils import Note
 
 Chunk = namedtuple('Chunk', ['chunk', 'duration', 'velocity'])
 
@@ -78,23 +80,91 @@ class MarkovChainOld:
             json.dump(self.chain, f)
 
 class MarkovChain:
+    names = ['note', 'duration', 'velocity']
     def __init__(self):
-        self.chain = defaultdict(Counter)
+        """
+        Chains: 
+            Note -> Note
+            Vel -> Vel
+            Duration -> Duration
+        Probable Improvement:
+            Note, Vel -> Duration
+        """
+        self.chains, self.sums = dict(), dict()
+        for name in self.names:
+            self.chains[name] = defaultdict(Counter)
+            self.sums[name] = defaultdict(int)
+            # self.sum[name] = 0
     
-    def add(self, prev, now, collate=None):
+    def add(self, prev, now, melody=True):
+        # for MELODY track, very likely to be no chords
+        if melody:
+            assert len(prev) == 1 and len(now) == 1, "Non-single note detected in MELODY mode"
+            p, n = prev[0], now[0]
+            for name in self.names:
+                # record transitions
+                self.chains[name][self._normalize(p[name], name)][self._normalize(n[name], name)] += 1
+                self.sums[name][self._normalize(p[name], name)] += 1
+                # self.sum[name] += 1
+        else:
+            raise NotImplementedError
+        return 
 
+    @staticmethod
+    def _normalize(value, name):
+        if name == 'duration':
+            # normalize duration
+            return MarkovChain._normalize_duration(value)
+        else:
+            return value
+
+    @staticmethod
+    def _normalize_duration(duration):
+        """
+        normalize to closet 10 ticks
+        TODO: norm to 50ms
+        """
+        return int(round(duration / 10)) * 10
+
+    def _sample_seed_note(self, verbose=False):
+        # create a note starts at timepoint 0
+        note = Note(st=0)
+        for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
+            choices = np.array(self.chains[name].items)
+            ps = np.array([self.sums[name][item] for item in self.chains[name].items])
+            ps /= ps.sum() # generate weight
+            if verbose:
+                print(ps)
+            note[out_name] = np.choice(choices, p=ps)
+        return note
+
+    def get_next(self, seed_note=None, greedy=True, verbose=True):
+        if seed_note is None:
+            seed_note = self._sample_seed_note(verbose=True)
+        if greedy:
+            note = Note(st=seed_note.end_time)
+            for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
+                stats = self.chains[name][seed_note[name]]
+                choices = np.array(stats.items)
+                ps = np.array([stats[item] for item in stats.items])
+                ps /= ps.sum() # generate weight
+                note[out_name] = np.choice(choices, p=ps)
+            note.end_time += note.start_time # fix end_time from duration
+        if verbose:
+            print(note)
+        return note
 
 if __name__ == '__main__':
     import sys
-    if len(sys.argv) == 2 and sys.argv[1] == 'test':
-        m = MarkovChain()
-        m.add(12, 14, 200)
-        m.add(12, 15, 200)
-        m.add(14, 25, 200)
-        m.add(12, 14, 200)
-        n = MarkovChain()
-        n.add(10, 13, 100)
-        n.add(12, 14, 200)
-        m.merge(n)
-        print(m)
-        m.print_as_matrix()
+    # if len(sys.argv) == 2 and sys.argv[1] == 'test':
+    #     m = MarkovChain()
+    #     m.add(12, 14, 200)
+    #     m.add(12, 15, 200)
+    #     m.add(14, 25, 200)
+    #     m.add(12, 14, 200)
+    #     n = MarkovChain()
+    #     n.add(10, 13, 100)
+    #     n.add(12, 14, 200)
+    #     m.merge(n)
+    #     print(m)
+    #     m.print_as_matrix()
