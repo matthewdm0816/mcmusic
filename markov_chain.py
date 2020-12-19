@@ -7,7 +7,7 @@ import random, json
 
 Chunk = namedtuple('Chunk', ['chunk', 'duration', 'velocity'])
 
-class MarkovChain:
+class MarkovChainOld:
 
     def __init__(self):
         self.chain = defaultdict(Counter)
@@ -76,6 +76,13 @@ class MarkovChain:
         # TODO!
         with open(fp, 'w') as f:
             json.dump(self.chain, f)
+
+class MarkovChain:
+    def __init__(self):
+        self.chain = defaultdict(Counter)
+    
+    def add(self, prev, now, collate=None):
+
 
 if __name__ == '__main__':
     import sys

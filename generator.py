@@ -8,7 +8,7 @@ from markov_chain import MarkovChain
 import random, hashlib, argparse, mido, json, colorama
 import numpy as np
 import sklearn.cluster as cluster
-from utils import find
+from utils import find, warn, print_track, bienumerate
 
 temp_ticks = 0
 colorama.init(autoreset=True)
@@ -32,6 +32,10 @@ class Note:
         return "Note(note=%d, vel=%d, duration=%d @ %d)" % (
             self.note, self.velocity, self.duration, self.start_time
         )
+
+    def copy(self):
+        return Note(self.note, self.velocity, self.start_time, self.end_time)
+
 
 class Generator:
     def __init__(self, markov_chain):
@@ -95,8 +99,10 @@ class Parser:
         # ticks_per_beat.
         self.ticks_per_beat = None
         self.markov_chain = MarkovChain()
-        self._parse(verbose=verbose)
         self.track_records = []
+
+        self._parse(verbose=verbose)
+        
 
     @staticmethod
     def is_on(message):
@@ -115,7 +121,7 @@ class Parser:
         """
         midi = mido.MidiFile(self.filename)
         self.ticks_per_beat = midi.ticks_per_beat
-        print('ticks pre beat:', midi.ticks_per_beat)
+        print('ticks per beat:', midi.ticks_per_beat)
         temp_ticks = midi.ticks_per_beat
         previous_chunk = []
         current_chunk = []
@@ -162,19 +168,26 @@ class Parser:
             # last_time = -1000
             # last_total_time, current_total_time = 0, 0
             # last_velocity, current_velocity = 0, 0
+
+            # skip unchosen tracks
+            if idx != track_choose and track_choose != -1:
+                continue
+
             on_notes = []
             recorded_notes = []
             current_time = 0
+            
+            # enumerate messages
             for message in track:
                 if verbose:
                     print(message)
                 # any ON/OFF notes
                 if self.is_note(message):
+                    current_time += message.time
                     # TODO: use a state machine to record each note time!!!
                     pos = find(on_notes, lambda x: x.note == message.note)
                     # Note ON
                     if self.is_on(message):
-                        current_time += message.time
                         on_notes.append(Note(
                             note=message.note, 
                             velocity=message.velocity,
@@ -183,49 +196,73 @@ class Parser:
                     # Note END
                     else: 
                         if pos == []: # not find some note to end before start
-                            print(colorama.Fore.MAGENTA + "Warning: Note not found to end")
+                            warn("Warning: Note not found to end")
                             # raise ValueError("Note not found to end")
                             continue
                         else:
                             # NOTE: choose first note to end
-                            note = Note(on_notes[pos[0]]) # use a new copy
+                            note = on_notes[pos[0]].copy() # use a new copy
                             note.end_time = current_time # set end_time
                             del on_notes[pos[0]] # delete existed note
                             recorded_notes.append(note) # append to notes lib
+                    # update current time
+            # end up all remaining notes
             for note in on_notes:
-                # end up all remaining notes
                 note.end_time = current_time
-                recorded_notes.append(note)
-            
+                recorded_notes.append(note.copy())
+            # empty/meta track
+            if recorded_notes == []:
+                warn("Skipping meta/empty track")
+                continue
+
             # sort with start_time
             recorded_notes.sort(key=lambda note: note.start_time)
-            self.track_records.append(recorded_notes)
+            # self.track_records.append(recorded_notes)
+            if verbose:
+                print_track(recorded_notes)
+            print("In total %d notes in this track" % len(recorded_notes))
             
-            # MC parsing
-            start_times = np.from_array([note.start_time for note in recorded_notes])
+            # --- MC parsing ---
+            start_times = np.array([note.start_time for note in recorded_notes])
+            # start_times = start_times / self.ticks_per_beat * self.tempo / 1000
+            # print(start_times)
+            # print(start_times.shape)
+
             # cluster notes
+            # NOTE: DBSCAN seems clusters these notes very well, -1 notates single note
             cores, labels = cluster.dbscan(
-                start_times, metric='l2', eps=0.1, min_samples=1, n_jobs=4
+                start_times.reshape(-1, 1), eps=0.3, min_samples=2, n_jobs=4, p=2
             )
             print(cores, labels)
-            # TODO:
+            
+            chunks, chunk = [], []
+            last_label = None
+            for idx, label in enumerate(labels):
+                if label == last_label:
+                    # append into chunk
+                    chunk.append(recorded_notes[idx])
+                elif label == -1:
+                    # single note
+                    chunks.append(chunk)
+                    chunks.append([recorded_notes[idx]])
+                    last_label = None
+                else:
+                    # new chunk
+                    chunks.append(chunk)
+                    chunk = [recorded_notes[idx]]
+                    last_label = label
+            
+            # save clustered chunks into state & MC chain
+            self.track_records.append(chunks)
+            for prev, now in bienumerate(chunks):
+                self.markov_chain.add(prev, now)
+            
 
 
     def dump_records(self, filename):
         with open(filename, 'w') as fp:
             json.dump(self.track_records, fp)
 
-    def _sequence(self, previous_chunk, current_chunk, duration, velocity):
-        """
-        Given the previous chunk and the current chunk of notes as well
-        as an averaged duration of the current notes, this function
-        permutes every combination of the previous notes to the current
-        notes and sticks them into the markov chain.
-
-        Delegated to MarkovChain@add method
-        """
-        self.markov_chain.add(
-            previous_chunk, current_chunk, self._bucket_duration(duration), velocity)
 
     def _bucket_duration(self, ticks):
         """
@@ -250,10 +287,8 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) == 2:
         # Parse only | for debugging
-        parser = Parser(sys.argv[1], True)\
-        parser._parse()
-
-    if len(sys.argv) == 3:
+        parser = Parser(sys.argv[1], verbose=True)
+    elif len(sys.argv) == 3:
         # Example usage:
         # python generator.py <in.mid> <out.mid>
         chain = Parser(sys.argv[1], True).get_chain()
