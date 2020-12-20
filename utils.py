@@ -6,6 +6,7 @@ colorama.init(autoreset=True)
 
 from collections import namedtuple
 
+# hold duration only
 Chunk = namedtuple('Chunk', ['chunk', 'duration', 'velocity'])
 
 class bienumerate():
@@ -56,6 +57,38 @@ class Note:
     def duration(self):
         return self.end_time - self.start_time
 
+    # @property
+    # def note(self):
+    #     return self._note
+
+    # @note.setter
+    # def note(self, value):
+    #     self._note = int(round(value))
+
+    # @property
+    # def velocity(self):
+    #     return self._velocity
+
+    # @velocity.setter
+    # def velocity(self, value):
+    #     self._velocity = int(round(value))
+
+    # @property
+    # def start_time(self):
+    #     return self._start_time
+
+    # @start_time.setter
+    # def start_time(self, value):
+    #     self._start_time = int(round(value))
+
+    # @property
+    # def end_time(self):
+    #     return self._end_time
+
+    # @end_time.setter
+    # def end_time(self, value):
+    #     self._end_time = int(round(value))
+
     def __repr__(self):
         return "Note(note=%d, vel=%d, duration=%d @ %d)" % (
             self.note, self.velocity, self.duration, self.start_time
@@ -70,3 +103,6 @@ class Note:
 
     def __setitem__(self, key, value):
         setattr(self, key, value)
+
+def note_to_chunk(note: Note):
+    return Chunk(chunk=[note.note], duration=note.duration, velocity=note.velocity)

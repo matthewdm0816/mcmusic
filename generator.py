@@ -3,12 +3,14 @@
 # containing the note transitions and their frequencies.
 
 
-from markov_chain import MarkovChain
 
 import random, hashlib, argparse, mido, json, colorama
 import numpy as np
 import sklearn.cluster as cluster
+from tqdm import *
+
 from utils import find, warn, print_track, bienumerate, Note, Chunk, note_to_chunk
+from markov_chain import MarkovChain
 
 temp_ticks = 0
 colorama.init(autoreset=True)
@@ -29,44 +31,59 @@ class Generator:
         return Generator(markov_chain)
 
     def _note_to_messages(self, chunk):
-        temp = []
+        # TODO: add 休止符 support
+        messages = []
+        # add Note compatibility
         if isinstance(chunk, Note):
-            # add Note compatibility
             chunk = note_to_chunk(chunk)
-        for idx, n in enumerate(chunk.chunk):
-            if (idx < len(chunk.chunk) - 1):
-                temp.append(mido.Message('note_on', note=n, velocity=Chunk.velocity, time=0))
-            else:
-                temp.append(mido.Message('note_on', note=n, velocity=Chunk.velocity, time=0))
-        for idx, n in enumerate(chunk.chunk):
-            if (idx == 0):
-                temp.append(mido.Message('note_off', note=n, velocity=0, time=Chunk.duration))
-            else:
-                temp.append(mido.Message('note_off', note=n, velocity=0, time=0))
 
-        return temp
+        # add note_on msg
+        for idx, n in enumerate(chunk.chunk):
+            # print(n, chunk.velocity, chunk.duration)
+            messages.append(mido.Message('note_on', 
+                note=n, 
+                velocity=chunk.velocity, 
+                time=0
+                )
+            )
 
-    def generate(self, filename, n_notes=1000):
+        # add note_off msg
+        for idx, n in enumerate(chunk.chunk):
+            messages.append(mido.Message('note_off', 
+                note=n, 
+                velocity=0,
+                time=chunk.duration if idx == 0 else 0 # elapse time at first note_off
+                )
+            )
+
+        return messages
+
+    def generate(self, filename, n_notes=300, verbose=True):
+        # TODO
         with mido.midifiles.MidiFile() as midi:
             print(colorama.Fore.MAGENTA + "Generated MIDI ticks/beat: %d" % midi.ticks_per_beat)
             track = mido.MidiTrack()
             # midi.ticks_per_beat=temp_ticks
             last_chunk = None
+            log_prob = 0
             # Generate a sequence of some notes
-            for i in range(n_notes):
-                new_chunk = self.markov_chain.get_next(seed_note=last_chunk)
-                if isinstance(new_chunk, Note):
-                    new_chunk = note_to_chunk(new_chunk)
+            for _ in trange(n_notes):
+                # get note and its log-prob
+                new_chunk, lld = self.markov_chain.get_next(seed_note=last_chunk)
+                log_prob += lld
+
+                # expend to track
                 track.extend(self._note_to_messages(new_chunk))
-                last_chunk = []
-                for n in new_chunk.chunk:
-                    last_chunk.append(n)
-                last_chunk = tuple(last_chunk)
+                last_chunk = new_chunk
             midi.tracks.append(track)
             midi.save(filename)
-            print("test")
-            for message in track:
-                print(message)
+            print(colorama.Fore.MAGENTA + 
+                "Finished generating MIDI of length: %d, log-likelihood: %d, saved to %s" 
+                % (n_notes, log_prob, filename)
+            )
+            if verbose:
+                for message in track:
+                    print(message)
 
 
 class Parser:
@@ -109,10 +126,10 @@ class Parser:
         midi = mido.MidiFile(self.filename)
         self.ticks_per_beat = midi.ticks_per_beat
         print('ticks per beat:', midi.ticks_per_beat)
-        temp_ticks = midi.ticks_per_beat
-        previous_chunk = []
-        current_chunk = []
-        current_velocity = 0
+        # temp_ticks = midi.ticks_per_beat
+        # previous_chunk = []
+        # current_chunk = []
+        # current_velocity = 0
         current_time = 0
         # 选取track
         if (len(midi.tracks) > 1):
@@ -165,6 +182,7 @@ class Parser:
             current_time = 0
             
             # enumerate messages
+            # TODO: find 休止符, add as note 0
             for message in track:
                 if verbose:
                     print(message)
@@ -220,7 +238,8 @@ class Parser:
             cores, labels = cluster.dbscan(
                 start_times.reshape(-1, 1), eps=0.3, min_samples=2, n_jobs=4, p=2
             )
-            print(cores, labels)
+            if verbose:
+                print(cores, labels)
             
             chunks, chunk = [], []
             last_label = None
@@ -230,19 +249,21 @@ class Parser:
                     chunk.append(recorded_notes[idx])
                 elif label == -1:
                     # single note
-                    chunks.append(chunk)
+                    if chunk != []:
+                        chunks.append(chunk)
                     chunks.append([recorded_notes[idx]])
                     last_label = None
                 else:
                     # new chunk
-                    chunks.append(chunk)
+                    if chunk != []:
+                        chunks.append(chunk)
                     chunk = [recorded_notes[idx]]
                     last_label = label
             
             # save clustered chunks into state & MC chain
             self.track_records.append(chunks)
             for prev, now in bienumerate(chunks):
-                self.markov_chain.add(prev, now)
+                self.markov_chain.add(prev, now, melody=True)
             
 
 
@@ -274,11 +295,11 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) == 2:
         # Parse only | for debugging
-        parser = Parser(sys.argv[1], verbose=True)
+        parser = Parser(sys.argv[1], verbose=False)
     elif len(sys.argv) == 3:
         # Example usage:
         # python generator.py <in.mid> <out.mid>
-        chain = Parser(sys.argv[1], True).get_chain()
+        chain = Parser(sys.argv[1], verbose=False).get_chain()
         Generator.load(chain).generate(sys.argv[2])
         print('Generated markov chain')
     else:

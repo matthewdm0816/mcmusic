@@ -135,12 +135,18 @@ class MarkovChain:
         note = Note(st=0)
         log_prob = 0 # 0 == ln 1
         for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
-            choices = np.array(self.chains[name].items)
-            ps = np.array([self.sums[name][item] for item in self.chains[name].items])
-            ps /= ps.sum() # generate weight
+            choices = np.array(list(self.chains[name].keys()))
+            ps = np.array([self.sums[name][key] for key in self.chains[name].keys()])
+            # print(choices, ps)
+            ps = ps / ps.sum() # generate weight
             if verbose:
                 print(ps)
-            note[out_name], prob = np.choice(np.stack([choices, ps],axis=1), p=ps)
+            
+            # take a choice
+            zipped = np.stack([choices, ps], axis=1)
+            indices = np.arange(zipped.shape[0])
+            prop, prob = list(zipped[np.random.choice(indices, p=ps)])
+            note[out_name] = int(prop)
             log_prob += np.log(prob)
         return note, log_prob
 
@@ -158,10 +164,15 @@ class MarkovChain:
             note = Note(st=seed_note.end_time)
             for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
                 stats = self.chains[name][seed_note[name]]
-                choices = np.array(stats.items)
-                ps = np.array([stats[item] for item in stats.items])
-                ps /= ps.sum() # generate weight
-                note[out_name], prob = np.choice(np.stack([choices, ps],axis=1), p=ps)
+                choices = np.array(list(stats.keys()))
+                ps = np.array([stats[key] for key in stats.keys()])
+                ps = ps / ps.sum() # generate weight
+
+                # take a choice
+                zipped = np.stack([choices, ps], axis=1)
+                indices = np.arange(zipped.shape[0])
+                prop, prob = list(zipped[np.random.choice(indices, p=ps)])
+                note[out_name] = int(prop)
                 log_prob += np.log(prob)
             note.end_time += note.start_time # fix end_time from duration
         if verbose:
@@ -197,9 +208,6 @@ class MarkovChain:
         # TODO: Use DP to generate melody
         pass
 
-
-def note_to_chunk(note: Note):
-    return Chunk(chunk=[note.note], duration=note.duration, velocity=note.velocity)
 
 if __name__ == '__main__':
     import sys
