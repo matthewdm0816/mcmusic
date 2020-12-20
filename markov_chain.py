@@ -193,6 +193,10 @@ class MarkovChain:
                 for k, val in sums:
                     self.sums[name][k] = val
 
+    def generate_dp(self, seed_note=None):
+        # TODO: Use DP to generate melody
+        pass
+
 
 def note_to_chunk(note: Note):
     return Chunk(chunk=[note.note], duration=note.duration, velocity=note.velocity)

@@ -28,14 +28,17 @@ class Generator:
         assert isinstance(markov_chain, MarkovChain)
         return Generator(markov_chain)
 
-    def _note_to_messages(self, Chunk):
+    def _note_to_messages(self, chunk):
         temp = []
-        for idx, n in enumerate(Chunk.chunk):
-            if (idx < len(Chunk.chunk) - 1):
+        if isinstance(chunk, Note):
+            # add Note compatibility
+            chunk = note_to_chunk(chunk)
+        for idx, n in enumerate(chunk.chunk):
+            if (idx < len(chunk.chunk) - 1):
                 temp.append(mido.Message('note_on', note=n, velocity=Chunk.velocity, time=0))
             else:
                 temp.append(mido.Message('note_on', note=n, velocity=Chunk.velocity, time=0))
-        for idx, n in enumerate(Chunk.chunk):
+        for idx, n in enumerate(chunk.chunk):
             if (idx == 0):
                 temp.append(mido.Message('note_off', note=n, velocity=0, time=Chunk.duration))
             else:
