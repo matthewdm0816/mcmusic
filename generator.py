@@ -8,7 +8,7 @@ from markov_chain import MarkovChain
 import random, hashlib, argparse, mido, json, colorama
 import numpy as np
 import sklearn.cluster as cluster
-from utils import find, warn, print_track, bienumerate, Note
+from utils import find, warn, print_track, bienumerate, Note, Chunk, note_to_chunk
 
 temp_ticks = 0
 colorama.init(autoreset=True)
@@ -43,15 +43,17 @@ class Generator:
 
         return temp
 
-    def generate(self, filename):
+    def generate(self, filename, n_notes=1000):
         with mido.midifiles.MidiFile() as midi:
-            print(midi.ticks_per_beat)
+            print(colorama.Fore.MAGENTA + "Generated MIDI ticks/beat: %d" % midi.ticks_per_beat)
             track = mido.MidiTrack()
             # midi.ticks_per_beat=temp_ticks
             last_chunk = None
-            # Generate a sequence of 100 notes
-            for i in range(1000):
-                new_chunk = self.markov_chain.get_next(last_chunk)
+            # Generate a sequence of some notes
+            for i in range(n_notes):
+                new_chunk = self.markov_chain.get_next(seed_note=last_chunk)
+                if isinstance(new_chunk, Note):
+                    new_chunk = note_to_chunk(new_chunk)
                 track.extend(self._note_to_messages(new_chunk))
                 last_chunk = []
                 for n in new_chunk.chunk:

@@ -5,9 +5,7 @@ from collections import Counter, defaultdict, namedtuple
 import random, json
 import numpy as np
 
-from utils import Note
-
-Chunk = namedtuple('Chunk', ['chunk', 'duration', 'velocity'])
+from utils import Note, Chunk
 
 class MarkovChainOld:
 
@@ -97,6 +95,9 @@ class MarkovChain:
             # self.sum[name] = 0
     
     def add(self, prev, now, melody=True):
+        """
+        Add to transition matrix
+        """
         # for MELODY track, very likely to be no chords
         if melody:
             assert len(prev) == 1 and len(now) == 1, "Non-single note detected in MELODY mode"
@@ -127,32 +128,74 @@ class MarkovChain:
         return int(round(duration / 10)) * 10
 
     def _sample_seed_note(self, verbose=False):
+        """
+        Create a note from priori P(N)
+        """
         # create a note starts at timepoint 0
         note = Note(st=0)
+        log_prob = 0 # 0 == ln 1
         for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
             choices = np.array(self.chains[name].items)
             ps = np.array([self.sums[name][item] for item in self.chains[name].items])
             ps /= ps.sum() # generate weight
             if verbose:
                 print(ps)
-            note[out_name] = np.choice(choices, p=ps)
-        return note
+            note[out_name], prob = np.choice(np.stack([choices, ps],axis=1), p=ps)
+            log_prob += np.log(prob)
+        return note, log_prob
 
     def get_next(self, seed_note=None, greedy=True, verbose=True):
+        """
+        Get next note depending on last note(seed note)
+        According to P(N_{i+1}|N_i)
+        """
+        log_prob = 0 # log-likelihood
         if seed_note is None:
-            seed_note = self._sample_seed_note(verbose=True)
+            seed_note, lld = self._sample_seed_note(verbose=True)
+            log_prob += lld
         if greedy:
+            # greedily take
             note = Note(st=seed_note.end_time)
             for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
                 stats = self.chains[name][seed_note[name]]
                 choices = np.array(stats.items)
                 ps = np.array([stats[item] for item in stats.items])
                 ps /= ps.sum() # generate weight
-                note[out_name] = np.choice(choices, p=ps)
+                note[out_name], prob = np.choice(np.stack([choices, ps],axis=1), p=ps)
+                log_prob += np.log(prob)
             note.end_time += note.start_time # fix end_time from duration
         if verbose:
-            print(note)
-        return note
+            print(note, log_prob)
+        return note, log_prob
+
+    def dump(self, f):
+        """
+        Save chains from JSON
+        """
+        with open(f, 'w') as fp:
+            state_dict = {
+                "chains": self.chains,
+                "sums": self.sums
+            }
+            json.dump(state_dict, fp)
+
+    def load(self, f):
+        """
+        Load chains from JSON
+        """
+        with open(f, 'r') as fp:
+            state_dict = json.load(fp)
+            for name, chain in state_dict["chains"]:
+                for k, counter in chain:
+                    for key, val in counter:
+                        self.chains[name][k][key] = val
+            for name, sums in state_dict["sums"]:
+                for k, val in sums:
+                    self.sums[name][k] = val
+
+
+def note_to_chunk(note: Note):
+    return Chunk(chunk=[note.note], duration=note.duration, velocity=note.velocity)
 
 if __name__ == '__main__':
     import sys

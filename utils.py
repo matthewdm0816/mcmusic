@@ -4,6 +4,10 @@
 import colorama
 colorama.init(autoreset=True)
 
+from collections import namedtuple
+
+Chunk = namedtuple('Chunk', ['chunk', 'duration', 'velocity'])
+
 class bienumerate():
     """
     Bi-step enumerating iterables(like list)
