@@ -102,7 +102,8 @@ class MarkovChain:
         if melody:
             assert len(prev) == 1 and len(now) == 1, "Non-single note detected in MELODY mode"
             p, n = prev[0], now[0]
-            for name in self.names:
+            # only modify transition matrix of note
+            for name in self.names if n.note != 0 else ['note']:
                 # record transitions
                 self.chains[name][self._normalize(p[name], name)][self._normalize(n[name], name)] += 1
                 self.sums[name][self._normalize(p[name], name)] += 1
@@ -135,12 +136,17 @@ class MarkovChain:
         note = Note(st=0)
         log_prob = 0 # 0 == ln 1
         for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
-            choices = np.array(list(self.chains[name].keys()))
-            ps = np.array([self.sums[name][key] for key in self.chains[name].keys()])
+            choices = list(self.chains[name].keys())
+            try:
+                choices.remove(0) # do not generate rest at the beginning
+            except ValueError:
+                pass
+            ps = np.array([self.sums[name][key] for key in choices])
             # print(choices, ps)
             ps = ps / ps.sum() # generate weight
-            if verbose:
-                print(ps)
+            choices = np.array(choices)
+            # if verbose:
+            #     print(ps)
             
             # take a choice
             zipped = np.stack([choices, ps], axis=1)
@@ -148,6 +154,8 @@ class MarkovChain:
             prop, prob = list(zipped[np.random.choice(indices, p=ps)])
             note[out_name] = int(prop)
             log_prob += np.log(prob)
+        if verbose:
+            print(note, log_prob)
         return note, log_prob
 
     def get_next(self, seed_note=None, greedy=True, verbose=True):
@@ -157,14 +165,16 @@ class MarkovChain:
         """
         log_prob = 0 # log-likelihood
         if seed_note is None:
-            seed_note, lld = self._sample_seed_note(verbose=True)
-            log_prob += lld
+            seed_note, lld = self._sample_seed_note(verbose=verbose)
+            return seed_note, lld
+            # log_prob += lld
         if greedy:
             # greedily take
             note = Note(st=seed_note.end_time)
             for name, out_name in zip(self.names, ['note', 'end_time', 'velocity']):
                 stats = self.chains[name][seed_note[name]]
                 choices = np.array(list(stats.keys()))
+                # print(name, choices)
                 ps = np.array([stats[key] for key in stats.keys()])
                 ps = ps / ps.sum() # generate weight
 

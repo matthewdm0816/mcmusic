@@ -14,16 +14,31 @@ class bienumerate():
     Bi-step enumerating iterables(like list)
     [1, 2, 3, 4] => (1, 2), (2, 3), (3, 4)
     """
-    def __init__(self, l):
-        self.iter = iter(l)
-        self.iter2 = iter(l)
-        next(self.iter2)
+    def __init__(self, l, crit=lambda x: True):
+        self.l = l
+        self.i, self.j = 0, 1
+        self.crit = crit
     
     def __iter__(self):
         return self
 
     def __next__(self):
-        return next(self.iter), next(self.iter2)
+        # print(colorama.Fore.MAGENTA + "%d, %d" % (self.i, self.j))
+        while self.i < len(self.l) and not self.crit(self.l[self.i]):
+            self.i += 1
+        if self.i + 1 >= len(self.l):
+            raise StopIteration
+        self.j = self.i + 1
+        while self.j < len(self.l) and not self.crit(self.l[self.j]):
+            self.j += 1
+        if self.j >= len(self.l):
+            raise StopIteration
+        res = (self.l[self.i], self.l[self.j])
+        self.i += 1
+        return res
+
+# l = [1, 3, 4, 7, 9]
+# for i, j in bienumerate(l, lambda x: x % 2==1): print(i, j)
 
 def find(list, crit):
     """
@@ -103,6 +118,13 @@ class Note:
 
     def __setitem__(self, key, value):
         setattr(self, key, value)
+
+    def get_state_dict(self):
+        return {
+            "note": self.note,
+            "velocity": self.velocity,
+            "duration": self.duration
+        }
 
 def note_to_chunk(note: Note):
     return Chunk(chunk=[note.note], duration=note.duration, velocity=note.velocity)

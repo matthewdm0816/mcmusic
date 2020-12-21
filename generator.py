@@ -22,13 +22,15 @@ TODO:
 """
 
 class Generator:
-    def __init__(self, markov_chain):
+    def __init__(self, markov_chain, tpb = None, tempo=None):
         self.markov_chain = markov_chain
+        self.tempo, self.ticks_per_beat = tempo, tpb
 
     @staticmethod
-    def load(markov_chain):
+    def load(state):
+        markov_chain, tpb, tempo = state
         assert isinstance(markov_chain, MarkovChain)
-        return Generator(markov_chain)
+        return Generator(markov_chain, tpb, tempo)
 
     def _note_to_messages(self, chunk):
         # TODO: add 休止符 support
@@ -37,44 +39,73 @@ class Generator:
         if isinstance(chunk, Note):
             chunk = note_to_chunk(chunk)
 
-        # add note_on msg
-        for idx, n in enumerate(chunk.chunk):
-            # print(n, chunk.velocity, chunk.duration)
+        # a rest
+        rest_note = 64
+        if 0 in chunk.chunk:
             messages.append(mido.Message('note_on', 
-                note=n, 
-                velocity=chunk.velocity, 
+                note=rest_note, 
+                velocity=0, 
                 time=0
                 )
             )
-
-        # add note_off msg
-        for idx, n in enumerate(chunk.chunk):
             messages.append(mido.Message('note_off', 
-                note=n, 
-                velocity=0,
-                time=chunk.duration if idx == 0 else 0 # elapse time at first note_off
+                note=rest_note, 
+                velocity=0, 
+                time=chunk.duration
                 )
             )
+        else:
+            # add note_on msg
+            for idx, n in enumerate(chunk.chunk):
+                assert n != 0
+                # print(n, chunk.velocity, chunk.duration)
+                messages.append(mido.Message('note_on', 
+                    note=n, 
+                    velocity=chunk.velocity, 
+                    time=0
+                    )
+                )
+
+            # add note_off msg
+            for idx, n in enumerate(chunk.chunk):
+                assert n != 0
+                messages.append(mido.Message('note_off', 
+                    note=n, 
+                    velocity=0,
+                    time=chunk.duration if idx == 0 else 0 # elapse time at first note_off
+                    )
+                )
 
         return messages
 
     def generate(self, filename, n_notes=300, verbose=True):
-        # TODO
         with mido.midifiles.MidiFile() as midi:
+            if self.ticks_per_beat is not None:
+                midi.ticks_per_beat = self.ticks_per_beat
             print(colorama.Fore.MAGENTA + "Generated MIDI ticks/beat: %d" % midi.ticks_per_beat)
             track = mido.MidiTrack()
             # midi.ticks_per_beat=temp_ticks
             last_chunk = None
             log_prob = 0
+            if self.tempo is not None:
+                track.extend([mido.MetaMessage('set_tempo', tempo=self.tempo)])
             # Generate a sequence of some notes
             for _ in trange(n_notes):
                 # get note and its log-prob
-                new_chunk, lld = self.markov_chain.get_next(seed_note=last_chunk)
+                new_chunk, lld = self.markov_chain.get_next(seed_note=last_chunk, verbose=verbose)
                 log_prob += lld
 
                 # expend to track
                 track.extend(self._note_to_messages(new_chunk))
-                last_chunk = new_chunk
+
+                # if rest, don't update N_i
+                if new_chunk.note == 0:
+                    # translate last note, set new duration
+                    duration = new_chunk.duration
+                    last_chunk.end_time = new_chunk.end_time
+                    last_chunk.start_time = new_chunk.end_time - duration
+                else:
+                    last_chunk = new_chunk
             midi.tracks.append(track)
             midi.save(filename)
             print(colorama.Fore.MAGENTA + 
@@ -88,13 +119,12 @@ class Generator:
 
 class Parser:
 
-    def __init__(self, filename, verbose=False):
+    def __init__(self, filename=None, verbose=False):
         """
         This is the constructor for a Serializer, which will serialize
         a midi given the filename and generate a markov chain of the
         notes in the midi.
         """
-        self.filename = filename
         # The tempo is number representing the number of microseconds
         # per beat.
         self.tempo = None
@@ -104,9 +134,16 @@ class Parser:
         self.ticks_per_beat = None
         self.markov_chain = MarkovChain()
         self.track_records = []
-
-        self._parse(verbose=verbose)
+        if filename is not None:
+            self.parse_file(filename, verbose=verbose)
         
+    def parse_file(self, filename, verbose=False):
+        self.filename = filename
+        self._parse(verbose=verbose)
+
+    @property
+    def beat_ticks(self):
+        return self.tempo / 1000 * self.ticks_per_beat
 
     @staticmethod
     def is_on(message):
@@ -126,36 +163,7 @@ class Parser:
         midi = mido.MidiFile(self.filename)
         self.ticks_per_beat = midi.ticks_per_beat
         print('ticks per beat:', midi.ticks_per_beat)
-        # temp_ticks = midi.ticks_per_beat
-        # previous_chunk = []
-        # current_chunk = []
-        # current_velocity = 0
         current_time = 0
-        # 选取track
-        if (len(midi.tracks) > 1):
-            print('choose tracks')
-            for idx, track in enumerate(midi.tracks):
-                print('track ', idx, ':', track)
-            track_choose = int(input("choose the track\n"))
-        else:
-            track_choose = 0
-            print('only 1 track')
-        # 选取channel
-        channels = set()
-        for idx, track in enumerate(midi.tracks):
-            if (idx != track_choose):
-                continue
-            for message in track:
-                if message.type == "note_on" or message.type == "note_off":
-                    channels.add(message.channel)
-        if (len(channels) > 1):
-            for channel in channels:
-                print('channel:', channel)
-            channel_choose = int(input('choose the channel\ninput -1 to choose all\n'))
-        else:
-            channels = list(channels)
-            channel_choose = channels[0]
-            print('only 1 track')
 
         # set music tempo previously
         for idx, track in enumerate(midi.tracks):
@@ -166,15 +174,9 @@ class Parser:
 
         # 读取音乐，构造马尔可夫链
         for idx, track in enumerate(midi.tracks):
-            # # current_time ~ current recorded chunk total time
-            # current_time = 0
-            # # last_time ~ last chunk ending time
-            # last_time = -1000
-            # last_total_time, current_total_time = 0, 0
-            # last_velocity, current_velocity = 0, 0
 
             # skip unchosen tracks
-            if idx != track_choose and track_choose != -1:
+            if track.name != 'MELODY':
                 continue
 
             on_notes = []
@@ -188,11 +190,22 @@ class Parser:
                     print(message)
                 # any ON/OFF notes
                 if self.is_note(message):
+                    # update current time
                     current_time += message.time
-                    # TODO: use a state machine to record each note time!!!
+                    # use a state machine to record each note time!!!
                     pos = find(on_notes, lambda x: x.note == message.note)
                     # Note ON
                     if self.is_on(message):
+                        # check 休止符 before add some note
+                        if on_notes == [] and message.time > self.ticks_per_beat / 8 and message.time != current_time:
+                            # skip trimming(at start) rest
+                            recorded_notes.append(Note(
+                                note=0,
+                                velocity=0,
+                                st=current_time - message.time, 
+                                et=current_time
+                            ))
+
                         on_notes.append(Note(
                             note=message.note, 
                             velocity=message.velocity,
@@ -210,7 +223,7 @@ class Parser:
                             note.end_time = current_time # set end_time
                             del on_notes[pos[0]] # delete existed note
                             recorded_notes.append(note) # append to notes lib
-                    # update current time
+                        
             # end up all remaining notes
             for note in on_notes:
                 note.end_time = current_time
@@ -226,7 +239,7 @@ class Parser:
             if verbose:
                 print_track(recorded_notes)
             print("In total %d notes in this track" % len(recorded_notes))
-            
+            self.track_records.append(recorded_notes)
             # --- MC parsing ---
             start_times = np.array([note.start_time for note in recorded_notes])
             # start_times = start_times / self.ticks_per_beat * self.tempo / 1000
@@ -261,15 +274,30 @@ class Parser:
                     last_label = label
             
             # save clustered chunks into state & MC chain
-            self.track_records.append(chunks)
-            for prev, now in bienumerate(chunks):
-                self.markov_chain.add(prev, now, melody=True)
+            # self.track_records.append(chunks)
+            last_note = None
+            for note in chunks:
+                if last_note is None:
+                    last_note = note
+                    continue
+                
+                self.markov_chain.add(last_note, note, melody=True)
+                if note[0].note != 0:
+                    # skip rest | monkey patch
+                    # TODO: more robust
+                    last_note = note
             
 
-
     def dump_records(self, filename):
+        class MyEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, Note): 
+                    return obj.get_state_dict()
+                return json.JSONEncoder.default(self, obj)
+
         with open(filename, 'w') as fp:
-            json.dump(self.track_records, fp)
+            json.dump(self.track_records, fp, cls=MyEncoder)
+            
 
 
     def _bucket_duration(self, ticks):
@@ -286,10 +314,28 @@ class Parser:
             raise TypeError(
                 "Could not read a tempo and ticks_per_beat from midi")
 
-    def get_chain(self):
-        print(self.markov_chain)
-        return self.markov_chain
+    def get_state_dict(self):
+        # print(self.markov_chain)
+        return self.markov_chain, self.ticks_per_beat, self.tempo
 
+
+def generate(in_list, out_list, mapping='serial'):
+    """
+    generate multiple music from multiple input
+    mapping: way how input maps to output
+    """
+    assert mapping in ('serial', 'total') or isinstance(mapping, list)
+    if mapping == 'serial':
+        assert len(in_list) == len(out_list), 'In/out list of songs mismatch'
+        mapping = [(i, i) for i in range(len(in_list))]
+    elif mapping == 'total':
+        mapping = [(i, 1) for i in range(len(out_list))]
+
+    for files in in_list:
+        for fn in files:
+            parser = Parser(fn, verbose=False)
+            
+    
 
 if __name__ == "__main__":
     import sys
@@ -299,9 +345,10 @@ if __name__ == "__main__":
     elif len(sys.argv) == 3:
         # Example usage:
         # python generator.py <in.mid> <out.mid>
-        chain = Parser(sys.argv[1], verbose=False).get_chain()
-        Generator.load(chain).generate(sys.argv[2])
-        print('Generated markov chain')
+        parser = Parser(sys.argv[1], verbose=False)
+        parser.dump_records('dump.json')
+        state = parser.get_state_dict()
+        Generator.load(state).generate(sys.argv[2], n_notes=100, verbose=False)
     else:
         print('Invalid number of arguments:')
         print('Example usage: python generator.py <in.mid> <out.mid>')
