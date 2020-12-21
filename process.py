@@ -11,25 +11,20 @@ from generator import Parser
 temp_ticks = 0
 colorama.init(autoreset=True)
 
-filenames = [
-            'sample/001.mid', 
-            'sample/002.mid', 
-            'sample/003.mid', 
-            'sample/004.mid',
-            'sample/005.mid',
-            'sample/006.mid',
-        ]
-
-filenames = [
-    os.path.join('..', 'POP909-Dataset', 'POP909', "%03d" % i, "%03d.mid" % i) for i in range(1, 100)
-]
-
-outnames = [
-    os.path.join("sample", "%03d.json" % i) for i in range(1, 100)
-]
+n_music = 100
 
 if __name__ == "__main__":
     import sys
+    if len(sys.argv) > 1:
+        n_music = int(sys.argv[1])
+
+    filenames = [
+        os.path.join('..', 'POP909-Dataset', 'POP909', "%03d" % i, "%03d.mid" % i) for i in range(1, n_music + 1)
+    ]
+    outnames = [
+        os.path.join("sample", "%03d.json" % i) for i in range(1, n_music + 1)
+    ]
+
     for f, out in zip(filenames, outnames):
         print(colorama.Fore.MAGENTA + "Processing MIDI %s" % (f))
         parser = Parser(f, verbose=False)
