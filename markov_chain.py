@@ -5,7 +5,7 @@ from collections import Counter, defaultdict, namedtuple
 import random, json
 import numpy as np
 
-from utils import Note, Chunk
+from utils import Note, Chunk, warn
 
 class MarkovChainOld:
 
@@ -100,7 +100,8 @@ class MarkovChain:
         """
         # for MELODY track, very likely to be no chords
         if melody:
-            assert len(prev) == 1 and len(now) == 1, "Non-single note detected in MELODY mode"
+            if not (len(prev) == 1 and len(now) == 1):
+                warn("Non-single note detected in MELODY mode, using first one")
             p, n = prev[0], now[0]
             # only modify transition matrix of note
             for name in self.names if n.note != 0 else ['note']:

@@ -54,7 +54,7 @@ def warn(msg):
     """
     Print in magenta, as a warning
     """
-    print(colorama.Fore.MAGENTA + msg)
+    print(colorama.Fore.YELLOW + msg)
 
 def print_track(notes):
     """
