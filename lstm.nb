@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    122394,       2592]
-NotebookOptionsPosition[    119333,       2533]
-NotebookOutlinePosition[    119688,       2549]
-CellTagsIndexPosition[    119645,       2546]
+NotebookDataLength[    131127,       2795]
+NotebookOptionsPosition[    128149,       2737]
+NotebookOutlinePosition[    128504,       2753]
+CellTagsIndexPosition[    128461,       2750]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -163,7 +163,7 @@ xSD6hrN0bSKQZnlk2wiinwtO8EwF0iGLZ4Dp+WpHjrcA6QsbRE+C6F9yt66D
 6JKcO2A6Kz3vDojWOytzH0RXHbl8sRXknr8XLoHoHkGF+yA6IksNTHOI8bj3
 A+nsg988QPRs94WVIJop5GoViH4k96AZRMs1PGkF0QDvX6Ee
   "],
- CellLabel->"In[9]:=",ExpressionUUID->"89f46c6d-7c87-4660-a8a1-b37f09668354"],
+ CellLabel->"In[1]:=",ExpressionUUID->"89f46c6d-7c87-4660-a8a1-b37f09668354"],
 
 Cell[BoxData["\<\"D:\\\\Stuff\\\\Research\\\\MM\\\\mcmusic\\\\data.mx\"\>"], \
 "Output",
@@ -180,8 +180,8 @@ Cell[BoxData["\<\"D:\\\\Stuff\\\\Research\\\\MM\\\\mcmusic\\\\data.mx\"\>"], \
    3.817644382302637*^9, 3.817645536780983*^9, 3.817646675017751*^9, 
    3.8176467357988195`*^9, 3.8176468085681396`*^9, 3.8176468454534473`*^9, 
    3.8176476147771187`*^9, 3.817647880385434*^9, 3.8176604824644203`*^9, 
-   3.8176622382669415`*^9},
- CellLabel->"Out[9]=",ExpressionUUID->"16d7405c-9118-4141-98c6-f4b54d54962c"],
+   3.8176622382669415`*^9, 3.8176625503651876`*^9},
+ CellLabel->"Out[1]=",ExpressionUUID->"b90846dd-aaed-478f-8e0b-c82bc55611d4"],
 
 Cell[BoxData[
  InterpretationBox[
@@ -288,8 +288,8 @@ Cell[BoxData[
    3.817644382302637*^9, 3.817645536780983*^9, 3.817646675017751*^9, 
    3.8176467357988195`*^9, 3.8176468085681396`*^9, 3.8176468454534473`*^9, 
    3.8176476147771187`*^9, 3.817647880385434*^9, 3.8176604824644203`*^9, 
-   3.8176622383352113`*^9},
- CellLabel->"Out[14]=",ExpressionUUID->"e38e471f-7d38-4fbe-962d-69db4a3cb032"]
+   3.8176622382669415`*^9, 3.8176625504319134`*^9},
+ CellLabel->"Out[6]=",ExpressionUUID->"a1a3f65d-5e27-4fa4-a4b5-d8aaf6d18387"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -388,7 +388,7 @@ Cell[BoxData[
    3.817634872561082*^9, 3.817634927835947*^9}, {3.8176511877021303`*^9, 
    3.8176515057341347`*^9}, {3.8176515379369817`*^9, 
    3.8176516039461637`*^9}, {3.8176564893119802`*^9, 3.8176564996247067`*^9}},
- CellLabel->"In[15]:=",ExpressionUUID->"e8f81a8f-73b4-4e7f-9c43-d709335464b0"],
+ CellLabel->"In[7]:=",ExpressionUUID->"e8f81a8f-73b4-4e7f-9c43-d709335464b0"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -396,15 +396,15 @@ Cell[BoxData[
  CellChangeTimes->{{3.817651282175835*^9, 3.817651434720049*^9}, 
    3.8176515068057795`*^9, {3.81765154477359*^9, 3.817651579972622*^9}, 
    3.817656500140914*^9, 3.8176604827123213`*^9, {3.8176622365839624`*^9, 
-   3.8176622385072913`*^9}},
- CellLabel->"Out[17]=",ExpressionUUID->"60788f04-a3a9-4f2f-9255-71c102a422f0"],
+   3.8176622385072913`*^9}, 3.8176625505779047`*^9},
+ CellLabel->"Out[9]=",ExpressionUUID->"c24888a4-e4af-44e0-8ec4-bd8b67abf784"],
 
 Cell[BoxData["58"], "Output",
  CellChangeTimes->{{3.817651282175835*^9, 3.817651434720049*^9}, 
    3.8176515068057795`*^9, {3.81765154477359*^9, 3.817651579972622*^9}, 
    3.817656500140914*^9, 3.8176604827123213`*^9, {3.8176622365839624`*^9, 
-   3.817662238513352*^9}},
- CellLabel->"Out[18]=",ExpressionUUID->"60c6f0ed-c8ac-4452-a07e-f1396cc35df2"]
+   3.8176622385072913`*^9}, 3.8176625505808296`*^9},
+ CellLabel->"Out[10]=",ExpressionUUID->"d551c3b9-98e6-4f43-bb0e-519c68eeb588"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -429,7 +429,7 @@ Cell[BoxData[
        RowBox[{"Length", "@", "data"}]}], "}"}]}], "]"}], ",", "Identity"}], 
   "]"}]], "Input",
  CellChangeTimes->{{3.817639433200946*^9, 3.8176395571282187`*^9}},
- CellLabel->"In[23]:=",ExpressionUUID->"0abc1ee7-76c1-4d3f-a069-73a073323824"],
+ CellLabel->"In[15]:=",ExpressionUUID->"0abc1ee7-76c1-4d3f-a069-73a073323824"],
 
 Cell[BoxData["True"], "Output",
  CellChangeTimes->{{3.817639440394854*^9, 3.817639500518449*^9}, {
@@ -437,8 +437,9 @@ Cell[BoxData["True"], "Output",
    3.8176414203419876`*^9, 3.817641463199075*^9, 3.8176443831352816`*^9, 
    3.817645537431444*^9, 3.8176466757759666`*^9, 3.8176467366856203`*^9, 
    3.8176468091965723`*^9, 3.81764684608751*^9, 3.817647615450905*^9, 
-   3.8176478809868603`*^9, 3.8176604832235065`*^9, 3.817662238924189*^9},
- CellLabel->"Out[23]=",ExpressionUUID->"df98c379-523a-4e5e-b87e-945467926f40"]
+   3.8176478809868603`*^9, 3.8176604832235065`*^9, 3.817662238924189*^9, 
+   3.81766255107296*^9},
+ CellLabel->"Out[15]=",ExpressionUUID->"aae7f11a-7e60-4756-8ce2-e2efc5cf1c88"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -554,12 +555,13 @@ Cell[BoxData[
    3.817651532047202*^9}, {3.8176593154828043`*^9, 3.8176593204732103`*^9}, {
    3.817659391869522*^9, 3.817659691078525*^9}, {3.8176597500161047`*^9, 
    3.8176597547650647`*^9}},
- CellLabel->"In[24]:=",ExpressionUUID->"329faed7-d416-41c6-a4a0-849f1f1e544b"],
+ CellLabel->"In[16]:=",ExpressionUUID->"329faed7-d416-41c6-a4a0-849f1f1e544b"],
 
-Cell[BoxData["123.05474509803922`"], "Output",
+Cell[BoxData["121.84794117647058`"], "Output",
  CellChangeTimes->{{3.8176596335626235`*^9, 3.8176597010433507`*^9}, 
-   3.8176598031171274`*^9, 3.817660506660346*^9, 3.817662260535844*^9},
- CellLabel->"Out[28]=",ExpressionUUID->"7fcc5d6b-6bcf-4d96-bcd2-e4ce2fa1e9ce"]
+   3.8176598031171274`*^9, 3.817660506660346*^9, 3.817662260535844*^9, 
+   3.8176625739757977`*^9},
+ CellLabel->"Out[20]=",ExpressionUUID->"d6369a72-c740-4172-89b8-c92a2c8b1d36"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -646,7 +648,7 @@ Cell[BoxData[{
    3.8176504569887395`*^9}, {3.8176511558027735`*^9, 
    3.8176511763909426`*^9}, {3.8176593438211546`*^9, 
    3.8176593484207764`*^9}, {3.817659776641076*^9, 3.8176597769672203`*^9}},
- CellLabel->"In[29]:=",ExpressionUUID->"9819ee16-39b2-4cae-a4f9-33bf4f44953e"],
+ CellLabel->"In[21]:=",ExpressionUUID->"9819ee16-39b2-4cae-a4f9-33bf4f44953e"],
 
 Cell[BoxData[
  TagBox[
@@ -904,13 +906,13 @@ Cell[BoxData[
                     "OutputSize" -> 512, "Dropout" -> 
                     NeuralNetworks`ValidatedParameter[None], "$InputSize" -> 
                     58, "$SequenceLength" -> 
-                    NeuralNetworks`LengthVar[1532852762], 
+                    NeuralNetworks`LengthVar[2034566485], 
                     "$CellStateConnectedQ" -> False], "Inputs" -> 
                     Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 58}, 
+                    NeuralNetworks`LengthVar[2034566485], 58}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "States" -> 
                     Association[
                     "State" -> 
@@ -929,12 +931,12 @@ Cell[BoxData[
                     NeuralNetworks`Private`ScalarSymbol[2] -> {
                     "ScaledExponentialLinearUnit", 
                     NeuralNetworks`Private`ScalarSymbol[1]}]]], "$Dimensions" -> {
-                    NeuralNetworks`LengthVar[1532852762], 512}], "Inputs" -> 
+                    NeuralNetworks`LengthVar[2034566485], 512}], "Inputs" -> 
                     Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]]], "3" -> 
                     Association[
                     "Type" -> "NetMap", "Arrays" -> Association[], 
@@ -958,15 +960,15 @@ Cell[BoxData[
                     Association[
                     "Output" -> NeuralNetworks`TensorT[{512}, 
                     NeuralNetworks`RealT]]], "$SequenceLength" -> 
-                    NeuralNetworks`LengthVar[1532852762], "$InputShape" -> 
+                    NeuralNetworks`LengthVar[2034566485], "$InputShape" -> 
                     NeuralNetworks`TensorT[{512}, NeuralNetworks`RealT], 
                     "$OutputShape" -> 
                     NeuralNetworks`TensorT[{512}, NeuralNetworks`RealT]], 
                     "Inputs" -> Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]]], "4" -> 
                     Association[
                     "Type" -> "Dropout", "Arrays" -> Association[], 
@@ -974,10 +976,10 @@ Cell[BoxData[
                     Association[
                     "DropoutProbability" -> 0.3, "Method" -> "Dropout"], 
                     "Inputs" -> Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]]], "5" -> 
                     Association[
                     "Type" -> "LongShortTermMemory", "Arrays" -> 
@@ -1010,13 +1012,13 @@ Cell[BoxData[
                     "OutputSize" -> 512, "Dropout" -> 
                     NeuralNetworks`ValidatedParameter[None], "$InputSize" -> 
                     512, "$SequenceLength" -> 
-                    NeuralNetworks`LengthVar[1532852762], 
+                    NeuralNetworks`LengthVar[2034566485], 
                     "$CellStateConnectedQ" -> False], "Inputs" -> 
                     Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "States" -> 
                     Association[
                     "State" -> 
@@ -1035,12 +1037,12 @@ Cell[BoxData[
                     NeuralNetworks`Private`ScalarSymbol[2] -> {
                     "ScaledExponentialLinearUnit", 
                     NeuralNetworks`Private`ScalarSymbol[1]}]]], "$Dimensions" -> {
-                    NeuralNetworks`LengthVar[1532852762], 512}], "Inputs" -> 
+                    NeuralNetworks`LengthVar[2034566485], 512}], "Inputs" -> 
                     Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]]], "7" -> 
                     Association[
                     "Type" -> "NetMap", "Arrays" -> Association[], 
@@ -1064,15 +1066,15 @@ Cell[BoxData[
                     Association[
                     "Output" -> NeuralNetworks`TensorT[{512}, 
                     NeuralNetworks`RealT]]], "$SequenceLength" -> 
-                    NeuralNetworks`LengthVar[1532852762], "$InputShape" -> 
+                    NeuralNetworks`LengthVar[2034566485], "$InputShape" -> 
                     NeuralNetworks`TensorT[{512}, NeuralNetworks`RealT], 
                     "$OutputShape" -> 
                     NeuralNetworks`TensorT[{512}, NeuralNetworks`RealT]], 
                     "Inputs" -> Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]]], "8" -> 
                     Association[
                     "Type" -> "Dropout", "Arrays" -> Association[], 
@@ -1080,16 +1082,16 @@ Cell[BoxData[
                     Association[
                     "DropoutProbability" -> 0.3, "Method" -> "Dropout"], 
                     "Inputs" -> Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association["Output" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]]], "9" -> 
                     Association[
                     "Type" -> "SequenceLast", "Arrays" -> Association[], 
                     "Parameters" -> Association[], "Inputs" -> 
                     Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 512}, 
+                    NeuralNetworks`LengthVar[2034566485], 512}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association[
                     "Output" -> 
@@ -1149,7 +1151,7 @@ Cell[BoxData[
                     NeuralNetworks`NetPath[
                     "Nodes", "11", "Outputs", "Output"]}, "Inputs" -> 
                     Association["Input" -> NeuralNetworks`TensorT[{
-                    NeuralNetworks`LengthVar[1532852762], 58}, 
+                    NeuralNetworks`LengthVar[2034566485], 58}, 
                     NeuralNetworks`RealT]], "Outputs" -> 
                     Association[
                     "Output" -> 
@@ -1607,8 +1609,8 @@ Cell[BoxData[
    3.817647871152139*^9, 3.817647883938181*^9}, 3.8176487849527884`*^9, 
    3.817649710783241*^9, 3.8176504697995763`*^9, 3.817650719652995*^9, 
    3.8176507680322094`*^9, 3.8176516075870247`*^9, 3.817659931556809*^9, 
-   3.817660508068216*^9, 3.817662261850127*^9},
- CellLabel->"Out[30]=",ExpressionUUID->"dd5d1671-0b82-4c35-a6a3-3698c4d98ab6"]
+   3.817660508068216*^9, 3.817662261850127*^9, 3.8176625752760906`*^9},
+ CellLabel->"Out[22]=",ExpressionUUID->"0e162a5c-d3a7-46cd-977c-0446a0565930"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1686,38 +1688,191 @@ Cell[BoxData[
    3.817659737677415*^9}, {3.8176598142026563`*^9, 3.8176598179178085`*^9}, 
    3.8176599624034114`*^9, {3.81766000526447*^9, 3.817660029289225*^9}, {
    3.817662197705674*^9, 3.817662198523227*^9}, {3.817662346563471*^9, 
-   3.817662353009686*^9}, {3.817662530361866*^9, 
-   3.817662534771987*^9}},ExpressionUUID->"25322ed4-25bd-46cd-a701-\
-6dd20ae15a77"],
+   3.817662353009686*^9}, {3.817662530361866*^9, 3.817662534771987*^9}},
+ CellLabel->"In[24]:=",ExpressionUUID->"25322ed4-25bd-46cd-a701-6dd20ae15a77"],
 
 Cell[BoxData[
- TemplateBox[{
-  "NetTrain","gpumemex","\"Computation aborted: GPU memory exhausted.\"",2,34,
-   4,19016702327567308117,"Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8176624897283945`*^9},
+ TagBox[
+  StyleBox[
+   FrameBox[GridBox[{
+      {
+       ItemBox[
+        FrameBox[
+         StyleBox["\<\"Training Progress\"\>", "SuggestionsBarText",
+          StripOnInput->False,
+          FontSize->12],
+         FrameMargins->{{10, 5}, {-4, 2}},
+         FrameStyle->None,
+         StripOnInput->False],
+        Alignment->{Left, Bottom},
+        Background->GrayLevel[0.96],
+        Frame->{{False, False}, {True, False}},
+        FrameStyle->Opacity[0.1],
+        ItemSize->{Automatic, 1},
+        StripOnInput->False]},
+      {
+       ItemBox[
+        FrameBox[
+         DynamicBox[ToBoxes[
+           Grid[{{
+              Item[
+               ProgressIndicator[
+               NeuralNetworks`Private`NetTrain`$progressFraction], Alignment -> 
+               Center], SpanFromLeft}, {"progress", 
+              NeuralNetworks`Private`NetTrain`row[
+               Round[NeuralNetworks`Private`NetTrain`$progressFraction 100], 
+               "% ", "(round ", NeuralNetworks`Private`NetTrain`$round, 
+               If[
+                Not[NeuralNetworks`Private`NetTrain`$noRoundLimit], {
+                "/", NeuralNetworks`Private`NetTrain`maxTrainingRounds}], 
+               If[
+               NeuralNetworks`Private`NetTrain`$showBatch, {
+                NeuralNetworks`Private`NetTrain`$c, "batch ", 
+                 NeuralNetworks`Private`NetTrain`$batch, "/", 
+                 NeuralNetworks`Private`NetTrain`$batchesPerRound}], ")"]}, {
+             "time", 
+              NeuralNetworks`Private`NetTrain`row[
+               GeneralUtilities`TimeString[
+                Round[NeuralNetworks`Private`NetTrain`$timeElapsed]], 
+               " elapsed", NeuralNetworks`Private`NetTrain`$c, 
+               If[
+                And[
+                NeuralNetworks`Private`NetTrain`$timeElapsed > 1, 
+                 NeuralNetworks`Private`NetTrain`$absoluteBatch > 4], {
+                 GeneralUtilities`TimeString[
+                  Round[NeuralNetworks`Private`NetTrain`$timeRemaining]], 
+                 " left", NeuralNetworks`Private`NetTrain`$c}], 
+               NeuralNetworks`Private`NetTrain`rateForm[
+               NeuralNetworks`Private`NetTrain`$batchRate 
+                NeuralNetworks`Private`NetTrain`$updatesPerBatch 
+                NeuralNetworks`Private`NetTrain`batchSize], " examples/s"]}, {
+             "method", 
+              
+              Row[{"ADAM", " optimizer", ", ", "batch size ", 48, ", ", 
+                "GPU"}]}, {"", 
+              NeuralNetworks`Private`NetTrain`fixedWidthRow[
+               Map[
+               NeuralNetworks`Private`NetTrain`keystyle, {"current", "round", 
+                 If[
+                 NeuralNetworks`Private`NetTrain`$doValidation, "validation", 
+                  Nothing]}]]}, {
+              Tooltip["loss", 
+               Column[{
+                 Row[{"Measurement: ", "loss"}]}]], 
+              NeuralNetworks`Private`NetTrain`fixedWidthRow[{
+                If[True, 
+                 NeuralNetworks`Private`NetTrain`lossForm[
+                  Identity[
+                   Lookup[
+                   NeuralNetworks`Private`NetTrain`$lastReportingObservation, 
+                    "Loss", None]]], 
+                 NeuralNetworks`Private`NetTrain`keystyle["n.a."]], 
+                NeuralNetworks`Private`NetTrain`lossForm[
+                 Identity[
+                  Lookup[
+                  NeuralNetworks`Private`NetTrain`$roundMeasurements, "Loss", 
+                   None]]], 
+                If[NeuralNetworks`Private`NetTrain`$doValidation, 
+                 If[
+                 NeuralNetworks`Private`NetTrain`$computingValidation, 
+                  "computing...", 
+                  NeuralNetworks`Private`NetTrain`lossForm[
+                   Identity[
+                    Lookup[
+                    NeuralNetworks`Private`NetTrain`$validationMeasurements, 
+                    "Loss", None]]]], Nothing]}]}, {
+              Tooltip["error", 
+               Column[{
+                 Row[{"Measurement: ", "ErrorRate"}]}]], 
+              NeuralNetworks`Private`NetTrain`fixedWidthRow[{
+                If[True, 
+                 NeuralNetworks`Private`NetTrain`percentForm[
+                  Identity[
+                   Lookup[
+                   NeuralNetworks`Private`NetTrain`$lastReportingObservation, 
+                    "ErrorRate", None]]], 
+                 NeuralNetworks`Private`NetTrain`keystyle["n.a."]], 
+                NeuralNetworks`Private`NetTrain`percentForm[
+                 Identity[
+                  Lookup[
+                  NeuralNetworks`Private`NetTrain`$roundMeasurements, 
+                   "ErrorRate", None]]], 
+                If[NeuralNetworks`Private`NetTrain`$doValidation, 
+                 If[
+                 NeuralNetworks`Private`NetTrain`$computingValidation, 
+                  "computing...", 
+                  NeuralNetworks`Private`NetTrain`percentForm[
+                   Identity[
+                    Lookup[
+                    NeuralNetworks`Private`NetTrain`$validationMeasurements, 
+                    "ErrorRate", None]]]], Nothing]}]}, {
+              RawBoxes[
+               
+               GridBox[{
+                Nothing, {"loss"}, {
+                 NeuralNetworks`Private`NetTrain`$lastLossPlotBoxes}, {
+                  TagBox[
+                   GridBox[{{
+                    ButtonBox[
+                    "\"\"", ButtonFunction :> {}, Evaluator -> None, 
+                    Appearance -> None, Method -> "Preemptive"], 
+                    "\"error rate\"", 
+                    ButtonBox[
+                    "\"\"", ButtonFunction :> {}, Evaluator -> None, 
+                    Appearance -> None, Method -> "Preemptive"]}}, AutoDelete -> 
+                    False, GridBoxItemSize -> {
+                    "Columns" -> {3, 20, 3}, "Rows" -> {2}}], "Grid"]}, {
+                 NeuralNetworks`Private`NetTrain`$lastMetricPlotBoxes}}, 
+                GridBoxSpacings -> {"Columns" -> {{0}}}]], SpanFromLeft}, {
+              NeuralNetworks`Private`staticNiceButton[
+              "Stop", NeuralNetworks`Private`NetTrain`$manualStop = (
+                 NeuralNetworks`Private`NetTrain`$shouldStop = True); 
+               NeuralNetworks`Private`NetTrain`$reasonTrainingStopped = 
+                "ManualStop"], SpanFromLeft}}, Dividers -> {{False, 
+               Opacity[0.15]}, {}}, ItemStyle -> {{
+               GrayLevel[0.4], None}}, ColumnWidths -> {7, 25}, 
+            ColumnAlignments -> {Right, Left}, ColumnSpacings -> {1.6, 2.5}, 
+            RowSpacings -> 1.4, RowMinHeight -> 1.3, 
+            BaseStyle -> {FontSize -> 11}], StandardForm],
+          ContentPadding->False,
+          ImageSizeCache->{397., {316., 322.}},
+          TrackedSymbols:>{},
+          UpdateInterval->0.33],
+         FrameMargins->{{10, 10}, {10, 5}},
+         FrameStyle->None,
+         StripOnInput->False],
+        Alignment->Left,
+        BaseStyle->{
+         FontWeight -> "Light", FontFamily -> "Microsoft YaHei UI", 
+          NumberMarks -> False, ScriptBaselineShifts -> {0, 0.5}, 
+          ScriptMinSize -> 8, ScriptSizeMultipliers -> 0.5},
+        StripOnInput->False]}
+     },
+     DefaultBaseStyle->"Column",
+     GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+     GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{1.}}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.5599999999999999]}, 
+         Offset[0.27999999999999997`]}, "Rows" -> {
+         Offset[0.2], 
+         Offset[1.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}}],
+    Background->GrayLevel[1],
+    FrameMargins->{{0, 0}, {0, 0}},
+    FrameStyle->GrayLevel[0.85],
+    RoundingRadius->5,
+    StripOnInput->False],
+   StripOnInput->False,
+   LineBreakWithin->False],
+  Deploy,
+  DefaultBaseStyle->"Deploy"]], "PrintTemporary",
+ CellChangeTimes->{3.8176625782298546`*^9},
  CellLabel->
-  "\:6b63\:5728\:8ba1\:7b97In[34]:=",ExpressionUUID->"ded10bdf-a49d-4337-a51a-\
-98a544b3fc69"],
-
-Cell[BoxData["$Failed"], "Output",
- CellChangeTimes->{{3.817650464907842*^9, 3.817650471619912*^9}, 
-   3.817650724639925*^9, 3.817650836077711*^9, 3.8176508943389792`*^9, 
-   3.8176511453680444`*^9, 3.8176564565034037`*^9, 3.817659929214613*^9, 
-   3.817659967051508*^9, {3.817660003420192*^9, 3.817660030430332*^9}, 
-   3.817660153705964*^9, 3.817660444629548*^9, 3.817660632369854*^9, 
-   3.817662199498206*^9, 3.8176623542592807`*^9, 3.81766248974098*^9},
- CellLabel->"Out[34]=",ExpressionUUID->"6a02079c-ec0a-40fc-b012-384706259b0b"],
-
-Cell[BoxData[
- RowBox[{"{", "$Failed", "}"}]], "Output",
- CellChangeTimes->{{3.817650464907842*^9, 3.817650471619912*^9}, 
-   3.817650724639925*^9, 3.817650836077711*^9, 3.8176508943389792`*^9, 
-   3.8176511453680444`*^9, 3.8176564565034037`*^9, 3.817659929214613*^9, 
-   3.817659967051508*^9, {3.817660003420192*^9, 3.817660030430332*^9}, 
-   3.817660153705964*^9, 3.817660444629548*^9, 3.817660632369854*^9, 
-   3.817662199498206*^9, 3.8176623542592807`*^9, 3.8176624897439847`*^9},
- CellLabel->"Out[35]=",ExpressionUUID->"27af29e1-98d1-48f5-885a-7654cb2f7c18"]
+  "\:6b63\:5728\:8ba1\:7b97In[24]:=",ExpressionUUID->"9f940dca-370f-4c53-8811-\
+f2ca4480393e"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1840,7 +1995,45 @@ Cell[BoxData[{
      RowBox[{"Thick", ",", "Dashed"}], "}"}]}], ",", "\[IndentingNewLine]", 
    RowBox[{"PlotLegends", "\[Rule]", 
     RowBox[{"{", "\"\<simulations\>\"", "}"}]}], ",", 
-   RowBox[{"Filling", "\[Rule]", "Axis"}]}], "]"}]}], "Input",
+   RowBox[{"Filling", "\[Rule]", "Axis"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"GibbsInference", "[", 
+   RowBox[{"seq_", ",", "model_", ",", "k_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"l", "=", 
+       RowBox[{"Length", "@", "seq"}]}], ",", "note"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"For", "[", 
+      RowBox[{
+       RowBox[{"i", "=", "1"}], ",", 
+       RowBox[{"i", "\[LessEqual]", "k"}], ",", 
+       RowBox[{"i", "=", 
+        RowBox[{"i", "+", "1"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"note", "=", 
+         RowBox[{"Normal", "@", 
+          RowBox[{"model", "[", "#", "]"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"note", "=", 
+         RowBox[{"First", "@", 
+          RowBox[{"Ordering", "[", 
+           RowBox[{"note", ",", 
+            RowBox[{"-", "1"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"seq", "=", 
+         RowBox[{"Join", "[", 
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", 
+             RowBox[{"2", ";;"}], "]"}], "]"}], ",", 
+           RowBox[{"Onehot", "[", 
+            RowBox[{
+             RowBox[{"{", "note", "}"}], ",", "ndim"}], "]"}], ",", "1"}], 
+          "]"}]}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", "seq"}]}], "\[IndentingNewLine]", 
+   "]"}]}]}], "Input",
  CellChangeTimes->{{3.817648798180789*^9, 3.8176487990771046`*^9}, {
    3.817649219032637*^9, 3.8176494514362793`*^9}, {3.8176565421381407`*^9, 
    3.8176566083977776`*^9}, {3.8176566585480447`*^9, 
@@ -1851,8 +2044,10 @@ Cell[BoxData[{
    3.8176578855675216`*^9, {3.8176579270789633`*^9, 3.817657927796095*^9}, {
    3.817657960841753*^9, 3.8176580043629756`*^9}, {3.8176580504631205`*^9, 
    3.817658213118828*^9}, {3.8176589448261724`*^9, 3.817658951473016*^9}, {
-   3.8176597108175526`*^9, 3.8176597108648696`*^9}},
- CellLabel->"In[29]:=",ExpressionUUID->"4ae00185-0589-4c7e-b5cb-622789c3f20d"],
+   3.8176597108175526`*^9, 3.8176597108648696`*^9}, {3.8176685127442894`*^9, 
+   3.8176685759204025`*^9}, {3.817668623991531*^9, 
+   3.817668709491448*^9}},ExpressionUUID->"4ae00185-0589-4c7e-b5cb-\
+622789c3f20d"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -2529,7 +2724,16 @@ Cell[BoxData[
  CellChangeTimes->{3.8176592655439863`*^9, 3.817659720141368*^9, 
   3.8176606340392838`*^9},
  CellLabel->"Out[34]=",ExpressionUUID->"c04cb596-e8e1-488f-99ff-fec98406d66f"]
-}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData["                                                                \
+                                                                              \
+                                                                              \
+                                                                              \
+                            "], "Input",
+ CellChangeTimes->{{3.817662633563691*^9, 
+  3.8176626447497687`*^9}},ExpressionUUID->"f78e4d35-8403-4475-8506-\
+c1238544194a"]
 },
 WindowSize->{852, 868},
 WindowMargins->{{Automatic, -7}, {Automatic, 0}},
@@ -2550,50 +2754,49 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 5116, 143, 611, "Input",ExpressionUUID->"89f46c6d-7c87-4660-a8a1-b37f09668354"],
-Cell[5699, 167, 1105, 16, 34, "Output",ExpressionUUID->"16d7405c-9118-4141-98c6-f4b54d54962c"],
-Cell[6807, 185, 5329, 106, 74, "Output",ExpressionUUID->"e38e471f-7d38-4fbe-962d-69db4a3cb032"]
+Cell[5699, 167, 1129, 16, 34, "Output",ExpressionUUID->"b90846dd-aaed-478f-8e0b-c82bc55611d4"],
+Cell[6831, 185, 5352, 106, 74, "Output",ExpressionUUID->"a1a3f65d-5e27-4fa4-a4b5-d8aaf6d18387"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12173, 296, 3941, 94, 428, "Input",ExpressionUUID->"e8f81a8f-73b4-4e7f-9c43-d709335464b0"],
-Cell[16117, 392, 397, 7, 34, "Output",ExpressionUUID->"60788f04-a3a9-4f2f-9255-71c102a422f0"],
-Cell[16517, 401, 349, 5, 34, "Output",ExpressionUUID->"60c6f0ed-c8ac-4452-a07e-f1396cc35df2"]
+Cell[12220, 296, 3940, 94, 428, "Input",ExpressionUUID->"e8f81a8f-73b4-4e7f-9c43-d709335464b0"],
+Cell[16163, 392, 420, 7, 34, "Output",ExpressionUUID->"c24888a4-e4af-44e0-8ec4-bd8b67abf784"],
+Cell[16586, 401, 375, 5, 34, "Output",ExpressionUUID->"d551c3b9-98e6-4f43-bb0e-519c68eeb588"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[16903, 411, 743, 20, 89, "Input",ExpressionUUID->"0abc1ee7-76c1-4d3f-a069-73a073323824"],
-Cell[17649, 433, 545, 7, 34, "Output",ExpressionUUID->"df98c379-523a-4e5e-b87e-945467926f40"]
+Cell[16998, 411, 743, 20, 89, "Input",ExpressionUUID->"0abc1ee7-76c1-4d3f-a069-73a073323824"],
+Cell[17744, 433, 570, 8, 34, "Output",ExpressionUUID->"aae7f11a-7e60-4756-8ce2-e2efc5cf1c88"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[18231, 445, 4548, 111, 428, "Input",ExpressionUUID->"329faed7-d416-41c6-a4a0-849f1f1e544b"],
-Cell[22782, 558, 267, 3, 34, "Output",ExpressionUUID->"7fcc5d6b-6bcf-4d96-bcd2-e4ce2fa1e9ce"]
+Cell[18351, 446, 4548, 111, 428, "Input",ExpressionUUID->"329faed7-d416-41c6-a4a0-849f1f1e544b"],
+Cell[22902, 559, 295, 4, 34, "Output",ExpressionUUID->"d6369a72-c740-4172-89b8-c92a2c8b1d36"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[23086, 566, 4059, 82, 627, "Input",ExpressionUUID->"9819ee16-39b2-4cae-a4f9-33bf4f44953e"],
-Cell[27148, 650, 49917, 960, 91, "Output",ExpressionUUID->"dd5d1671-0b82-4c35-a6a3-3698c4d98ab6"]
+Cell[23234, 568, 4059, 82, 627, "Input",ExpressionUUID->"9819ee16-39b2-4cae-a4f9-33bf4f44953e"],
+Cell[27296, 652, 49941, 960, 91, "Output",ExpressionUUID->"0e162a5c-d3a7-46cd-977c-0446a0565930"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[77102, 1615, 4569, 75, 530, "Input",ExpressionUUID->"25322ed4-25bd-46cd-a701-6dd20ae15a77"],
-Cell[81674, 1692, 336, 8, 25, "Message",ExpressionUUID->"ded10bdf-a49d-4337-a51a-98a544b3fc69"],
-Cell[82013, 1702, 538, 7, 34, "Output",ExpressionUUID->"6a02079c-ec0a-40fc-b012-384706259b0b"],
-Cell[82554, 1711, 563, 8, 34, "Output",ExpressionUUID->"27af29e1-98d1-48f5-885a-7654cb2f7c18"]
+Cell[77274, 1617, 4587, 74, 530, "Input",ExpressionUUID->"25322ed4-25bd-46cd-a701-6dd20ae15a77"],
+Cell[81864, 1693, 8123, 181, 702, "PrintTemporary",ExpressionUUID->"9f940dca-370f-4c53-8811-f2ca4480393e"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[83154, 1724, 204, 2, 30, "Input",ExpressionUUID->"01688a02-c5ac-40e3-be61-b3e7b7b0d3e7"],
-Cell[83361, 1728, 859, 11, 34, "Output",ExpressionUUID->"b660fbee-8881-4721-9ba9-1740c17c9434"]
+Cell[90024, 1879, 204, 2, 30, "Input",ExpressionUUID->"01688a02-c5ac-40e3-be61-b3e7b7b0d3e7"],
+Cell[90231, 1883, 859, 11, 34, "Output",ExpressionUUID->"b660fbee-8881-4721-9ba9-1740c17c9434"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[84257, 1744, 636, 14, 89, "Input",ExpressionUUID->"d98fc706-ab73-4a5c-890d-612ba019b561"],
-Cell[84896, 1760, 279, 4, 34, "Output",ExpressionUUID->"a16b33f0-4dc4-488a-a5ce-a4f33be6826c"],
-Cell[85178, 1766, 422, 8, 34, "Output",ExpressionUUID->"65f113e3-4cd0-4594-8c78-cb4369b70540"]
+Cell[91127, 1899, 636, 14, 89, "Input",ExpressionUUID->"d98fc706-ab73-4a5c-890d-612ba019b561"],
+Cell[91766, 1915, 279, 4, 34, "Output",ExpressionUUID->"a16b33f0-4dc4-488a-a5ce-a4f33be6826c"],
+Cell[92048, 1921, 422, 8, 34, "Output",ExpressionUUID->"65f113e3-4cd0-4594-8c78-cb4369b70540"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[85637, 1779, 3217, 75, 445, "Input",ExpressionUUID->"4ae00185-0589-4c7e-b5cb-622789c3f20d"],
-Cell[88857, 1856, 553, 10, 34, "Output",ExpressionUUID->"4f0a9aee-e98f-421f-8be9-2b8bedc25ff9"],
-Cell[89413, 1868, 10166, 232, 250, "Output",ExpressionUUID->"c061ec17-1639-47f3-90ac-343bb4138af5"]
+Cell[92507, 1934, 4672, 115, 718, "Input",ExpressionUUID->"4ae00185-0589-4c7e-b5cb-622789c3f20d"],
+Cell[97182, 2051, 553, 10, 34, "Output",ExpressionUUID->"4f0a9aee-e98f-421f-8be9-2b8bedc25ff9"],
+Cell[97738, 2063, 10166, 232, 250, "Output",ExpressionUUID->"c061ec17-1639-47f3-90ac-343bb4138af5"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[99616, 2105, 4017, 92, 661, "Input",ExpressionUUID->"314f0ab2-31ea-4456-b8ac-d537af0298dc"],
-Cell[103636, 2199, 15681, 331, 132, "Output",ExpressionUUID->"c04cb596-e8e1-488f-99ff-fec98406d66f"]
-}, Open  ]]
+Cell[107941, 2300, 4017, 92, 683, "Input",ExpressionUUID->"314f0ab2-31ea-4456-b8ac-d537af0298dc"],
+Cell[111961, 2394, 15681, 331, 132, "Output",ExpressionUUID->"c04cb596-e8e1-488f-99ff-fec98406d66f"]
+}, Open  ]],
+Cell[127657, 2728, 488, 7, 53, "Input",ExpressionUUID->"f78e4d35-8403-4475-8506-c1238544194a"]
 }
 ]
 *)
