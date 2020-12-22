@@ -47,6 +47,11 @@ P(X_{i}|\bold X-\{X_i\})=P(X_{i}|X_{i-1\operatorname{mod}n})
 $$
 于是我们可以通过Gibbs采样来得到一个概率较高的样本. 概括的来讲,Gibbs采样每次固定除了一个分量之外的其它分量, 并根据条件概率分布对没有固定的分量进行采样, 然后轮流对每一个分量进行如此操作, 可以证明, 如此进行足够多的轮数之后, 序列收敛于联合分布(即整个Markov Chain)的一个最概然序列. 值得一提的是Gibbs采样也广泛用于大量其它种类的概率分布的采样, 衍生出了MCMC等概率模型中的重要方法.
 
+| Gibbs Sampling                                               |
+| ------------------------------------------------------------ |
+| 1. $\forall i,x_i\sim RandomChoice(\mathcal H )$             |
+| 2. For i = 1...k, $x_{i\operatorname{mod}m}=RandomSample(P(X_{i}|\bold X-\{X_i\})=P(X_{i}|X_{i-1\operatorname{mod}n}))$ |
+
 #### HMM: Hidden States in Music
 
 可以想见, 在乐曲并不完全遵循Markov性质, 一首乐曲的某个音符很难只由其上一个音符决定, 而往往由上一段乐曲, 以及整段乐曲及其部分的语义决定. 隐式马尔可夫模型(HMM, Hidden Markov Model)指出, 一段观察序列$\boldsymbol O=(O_1,...,O_n)^T,O_i\in\mathcal N=\{1,...,m\}$可能由隐含状态$$\boldsymbol X=(X_1,...,X_n)^T,X_i\in\mathcal H=\{1,...,h\}$$所决定, 其中隐含状态又是符合Markov性质转移的, 某种意义上代表着序列某时刻的语义信息(比如此时应该时舒缓还是激烈, 欢快或是忧伤), 同样具有转移矩阵, 以及(若可能)的估计
